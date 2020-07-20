@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-Hants-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Creador de Firma de Email</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+
+  <body>
+    <div class="wrap">
+      <div id="present" class="present">
+        <table
+          style="
+            font-size: 0.875rem;
+            color: #333;
+            line-height: 1.6;
+            font-family: Heebo, PingFang, 'Microsoft JhengHei';
+          "
+        >
+          <!--           <style>
+            table,
+            th,
+            td {
+              border: 1px solid black;
+            }
+          </style> -->
+
+          <tbody>
+            <tr>
+              <td>
+                <a href="http://www.byv.com.pe" taget="_blank">
+                  <img
+                    style="width: 200px;"
+                    src="https://byv.com.pe/images/firma/logobyv.jpg"
+                  />
+                </a>
+              </td>
+              <td>
+                <div style="border-left: 3px solid #333; padding-left: 0.2em;">
+                  <br /><br /><br /><br /><br />
+                </div>
+              </td>
+              <td style="padding-left: 3px;">
+                <!--                 <div style="border-left: 3px solid #333; padding-left: 1em;"> -->
+                <div>
+                  <span id="primary-name" style="font-weight: 700;"></span>
+                  <span id="secondary-name" style="color: #5c5c5c;"></span>
+                </div>
+                <div style="font-size: 0.75em;">
+                  <div id="job-position"></div>
+                  <div>
+                    <a
+                      id="email-address"
+                      style="color: #5c5c5c;"
+                      href="mailto: "
+                    ></a>
+                  </div>
+                  <div id="mobile-number">+51</div>
+                  <div id="direccion"></div>
+                </div>
+                <!--    </div> -->
+              </td>
+              <td>
+                <img
+                  style="width: 70px;"
+                  src="https://byv.com.pe/images/firma/logobureau.png"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="aside">
+        <div class="header-group">
+          <h1 class="header">Creador de firma de correo</h1>
+          <!--           <time class="version" datatime="2018-04-23T04:27:19.809Z">v1.0.4</time>
+ -->
+        </div>
+        <div id="form" class="form">
+          <div class="input-group">
+            <input
+              id="input-primary-name"
+              class="input"
+              type="text"
+              name="primary-name"
+              value="Jordan"
+            />
+            <label for="input-primary-name" class="field">Primary name</label>
+          </div>
+          <div class="input-group">
+            <input
+              id="input-secondary-name"
+              class="input"
+              type="text"
+              name="secondary-name"
+              value="Barja Torres"
+            />
+            <label for="input-secondary-name" class="field"
+              >Secondary name</label
+            >
+          </div>
+          <div class="input-group">
+            <input
+              id="input-job-position"
+              class="input"
+              type="text"
+              name="job-position"
+              value="Gerente General"
+            />
+            <label for="input-job-position" class="field">Title</label>
+          </div>
+          <div class="input-group">
+            <input
+              id="input-email-address"
+              class="input"
+              type="email"
+              name="email-address"
+              value="jordan.barja@byv.com.pe"
+            />
+            <label for="input-email-address" class="field">Mail Address</label>
+          </div>
+          <div class="input-group">
+            <input
+              id="input-mobile-number"
+              class="input"
+              type="tel"
+              name="mobile-number"
+              value="51-912345678"
+            />
+            <label for="input-mobile-number" class="field">Mobile number</label>
+          </div>
+          <div class="input-group">
+            <input
+              id="input-direccion"
+              class="input"
+              type="text"
+              name="direccion"
+              value="Av. Santa Adela Mza N Lote 9 Fnd. Ex-Fundo Chacra Cerro, Comas-Lima"
+            />
+            <label for="input-direccion" class="field">Address</label>
+          </div>
+        </div>
+        <div class="tools">
+          <div id="status" class="status">Copied</div>
+          <button
+            id="copy-text-button"
+            class="button button-primary"
+            type="button"
+          >
+            Copiar firma de correo
+          </button>
+          <button
+            id="copy-html-button"
+            class="button button-secondary"
+            type="button"
+          >
+            Copy as HTML
+          </button>
+        </div>
+      </div>
+    </div>
+    <script src="./generator.js"></script>
+  </body>
+</html>

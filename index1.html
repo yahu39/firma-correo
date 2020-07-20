@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-Hants-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>l</title>
+    <!--     <link rel="stylesheet" href="./styles.css" /> -->
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        color: #333;
+        font-size: 16px;
+      }
+
+      .wrap {
+        display: flex;
+        /*         position: relative;
+        grid-template-areas: "aside present";
+        grid-template-columns: 240px 1fr;
+        grid-auto-rows: 100%;
+        grid-row-gap: 1rem; */
+        width: 100vw;
+        height: 100vh;
+      }
+      .present {
+        /*         grid-area: present; */
+        /*      display: flex; */
+        /*         justify-content: flex-start; */
+        /*         align-items: flex-start; */
+        padding: 1rem;
+        background-color: #fff;
+        overflow: auto;
+      }
+
+      .aside {
+        /*         grid-area: aside; */
+        /*         flex-shrink: 0; */
+        /*         display: flex; */
+        flex-direction: row;
+        border-right: 1px solid #c0c0c0;
+        background-color: #fff;
+      }
+      .header-group {
+        display: flex;
+        padding: 0.5rem 1rem;
+      }
+      .header {
+        flex-grow: 1;
+        font-size: 1rem;
+        margin: 0;
+        text-align: center;
+        white-space: nowrap;
+      }
+      .version {
+        align-self: flex-end;
+        margin-left: 0.5rem;
+        color: #c0c0c0;
+        font-size: 0.75rem;
+        text-align: center;
+      }
+
+      .tools {
+        position: relative;
+        padding: 2rem 2rem;
+      }
+
+      .form {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 1rem 0 1rem 0.25rem;
+        overflow: auto;
+      }
+      .input-group {
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column-reverse;
+        margin-bottom: 1rem;
+        padding: 0.25rem 1rem;
+      }
+      .input-group:last-children {
+        margin-bottom: 0;
+      }
+      .field {
+        padding-bottom: 0.25rem;
+        font-size: 0.75rem;
+        text-align: left;
+        color: rgba(51, 51, 51, 0.3);
+        white-space: nowrap;
+        transition: all 0.07s ease-in-out;
+      }
+      .input {
+        border: 0 none;
+        border-bottom: 1px dashed rgba(0, 0, 0, 0.24);
+        padding: 0.25rem 0.5rem;
+        outline: 0 none;
+        transition: all 0.07s ease-in-out;
+      }
+      .input:focus {
+        border-bottom-color: #333;
+        background-color: rgba(250, 227, 217, 0.32);
+      }
+      .input:focus ~ .field {
+        color: #333;
+      }
+
+      .button {
+        position: relative;
+        display: block;
+        margin: 0 auto 0.5rem;
+        border: 1px solid transparent;
+        border-bottom-right-radius: 0.75rem;
+        padding: 0.5rem 1.25rem;
+        width: 100%;
+        background-color: #ff5f5f;
+        transition: all 0.07s ease-in-out;
+        cursor: pointer;
+        z-index: 1;
+        outline: 0 none;
+      }
+      .button::after {
+        content: "";
+        top: -1px;
+        right: -1px;
+        position: absolute;
+        display: inline-block;
+        border: 1px solid transparent;
+        border-bottom-right-radius: 0.75rem;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        transform-origin: left bottom;
+        transition: all 0.07s ease-in-out;
+      }
+      .button:hover {
+        border-color: #ff5f5f;
+      }
+      .button:hover::after {
+        border-bottom-right-radius: 2.75rem 100%;
+      }
+      .button:last-child {
+        margin-bottom: 0;
+      }
+      .button-primary {
+        border-color: #33cccd;
+        color: #fff;
+      }
+      .button-primary::after {
+        background-color: #33cccd;
+      }
+      .button-primary:active::after {
+        background-color: #3eacad;
+      }
+      .button-secondary {
+        border-color: #33cccd;
+        color: #33cccd;
+      }
+      .button-secondary::after {
+        border-color: #33cccd;
+        background-color: #fff;
+      }
+      .button-secondary:active::after {
+        background-color: #fafafa;
+        box-shadow: -0.125rem 0.125rem 0.25rem rgba(0, 0, 0, 0.08) inset;
+      }
+
+      .status {
+        left: 0.5rem;
+        top: -0.75rem;
+        position: absolute;
+        display: inline-block;
+        font-size: 0.75rem;
+        color: #33cccd;
+        z-index: 1000;
+        user-select: none;
+        opacity: 0;
+        transform: translateX(-150%);
+        transition: transform 0.07s ease-in-out, opacity 0.07s ease-in-out;
+      }
+      .status.failed {
+        color: #ff5f5f;
+      }
+      .status.show {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <div id="present" class="present">
+        <div class="tools">
+          <div id="status" class="status">Copied</div>
+          <button
+            id="copy-text-button"
+            class="button button-primary"
+            type="button"
+          >
+            Copiar firma de correo
+          </button>
+          <button
+            id="copy-html-button"
+            class="button button-secondary"
+            type="button"
+          >
+            Copy as HTML
+          </button>
+          <table
+            style="
+              font-size: 0.875rem;
+              color: #333;
+              line-height: 1.6;
+              font-family: Heebo, PingFang, 'Microsoft JhengHei';
+            "
+          >
+            <!--           <style>
+            table,
+            th,
+            td {
+              border: 1px solid black;
+            }
+          </style> -->
+
+            <tbody>
+              <tr>
+                <td>
+                  <a href="http://www.byv.com.pe" taget="_blank">
+                    <img
+                      style="width: 200px;"
+                      src="https://byv.com.pe/images/firma/logobyv.jpg"
+                    />
+                  </a>
+                </td>
+                <td>
+                  <div
+                    style="border-left: 3px solid #333; padding-left: 0.2em;"
+                  >
+                    <br /><br /><br /><br /><br />
+                  </div>
+                </td>
+                <td style="padding-left: 3px;">
+                  <!--                 <div style="border-left: 3px solid #333; padding-left: 1em;"> -->
+                  <div>
+                    <span id="primary-name" style="font-weight: 700;"></span>
+                    <span id="secondary-name" style="color: #5c5c5c;"></span>
+                  </div>
+                  <div style="font-size: 0.75em;">
+                    <div id="job-position"></div>
+                    <div>
+                      <a
+                        id="email-address"
+                        style="color: #5c5c5c;"
+                        href="mailto: "
+                      ></a>
+                    </div>
+                    <div id="mobile-number">+51</div>
+                    <div id="direccion"></div>
+                  </div>
+                  <!--    </div> -->
+                </td>
+                <td>
+                  <img
+                    style="width: 70px;"
+                    src="https://byv.com.pe/images/firma/logobureau.png"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="aside">
+        <div class="header-group">
+          <h1 class="header">Llenar datos :</h1>
+          <!--           <time class="version" datatime="2018-04-23T04:27:19.809Z">v1.0.4</time>
+ -->
+        </div>
+        <div id="form" class="form">
+          <div class="input-group">
+            <input
+              id="input-primary-name"
+              class="input"
+              type="text"
+              name="primary-name"
+              value="Jordan"
+            />
+            <label for="input-primary-name" class="field">Primary name</label>
+          </div>
+          <div class="input-group">
+            <input
+              id="input-secondary-name"
+              class="input"
+              type="text"
+              name="secondary-name"
+              value="Barja Torres"
+            />
+            <label for="input-secondary-name" class="field"
+              >Secondary name</label
+            >
+          </div>
+          <div class="input-group">
+            <input
+              id="input-job-position"
+              class="input"
+              type="text"
+              name="job-position"
+              value="Gerente General"
+            />
+            <label for="input-job-position" class="field">Title</label>
+          </div>
+          <div class="input-group">
+            <input
+              id="input-email-address"
+              class="input"
+              type="email"
+              name="email-address"
+              value="jordan.barja@byv.com.pe"
+            />
+            <label for="input-email-address" class="field">Mail Address</label>
+          </div>
+          <div class="input-group">
+            <input
+              id="input-mobile-number"
+              class="input"
+              type="tel"
+              name="mobile-number"
+              value="51-912345678"
+            />
+            <label for="input-mobile-number" class="field">Mobile number</label>
+          </div>
+          <div class="input-group">
+            <input
+              id="input-direccion"
+              class="input"
+              type="text"
+              name="direccion"
+              value="Av. Santa Adela Mza N Lote 9 Fnd. Ex-Fundo Chacra Cerro, Comas-Lima"
+            />
+            <label for="input-direccion" class="field">Address</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        const fieldNameMapping = {
+          primaryName: "primary-name",
+          secondaryName: "secondary-name",
+          postion: "job-position",
+          email: "email-address",
+          mobile: "mobile-number",
+          direccionbyv: "direccion",
+        };
+
+        const renderMethod = {
+          [fieldNameMapping.primaryName]: (name) => String(name).trim(),
+          [fieldNameMapping.secondaryName]: (name) => String(name).trim(),
+          [fieldNameMapping.postion]: (postion) => String(postion).trim(),
+          [fieldNameMapping.email]: (address) => String(address).trim(),
+          [fieldNameMapping.mobile]: (number) =>
+            number && number.length > 0
+              ? `+${String(number)
+                  .trim()
+                  .match(/\d{1,3}/g)
+                  .join(" ")}`
+              : "",
+          [fieldNameMapping.direccionbyv]: (direccion) =>
+            String(direccion).trim(),
+        };
+
+        const fieldCollection = new Map();
+
+        const $form = document.querySelector("#form");
+        const $present = document.querySelector("#present");
+        const $status = document.querySelector("#status");
+
+        function render($input) {
+          const field = $input.getAttributeNode("name").value;
+
+          let $target;
+          if (fieldCollection.has(field)) {
+            $target = fieldCollection.get(field);
+          } else {
+            $target = document.querySelector(`#${field}`);
+            fieldCollection.set(field, $target);
+          }
+
+          const value = renderMethod[field]($input.value);
+
+          $target.innerText = value;
+
+          if (fieldNameMapping.email === field) {
+            $target.setAttribute("href", `mailto:${value}`);
+          }
+        }
+
+        let copyTimer;
+        function showCopyResult(success) {
+          if (copyTimer) {
+            window.clearTimeout(copyTimer);
+          }
+
+          const text = success ? "Copied" : "Failed";
+          $status.innerText = text;
+
+          if (!success) {
+            $status.classList.add("failed");
+          } else {
+            $status.classList.remove("failed");
+          }
+
+          $status.classList.add("show");
+
+          const waitTime = 3000;
+          copyTimer = window.setTimeout(() => {
+            $status.classList.remove("show");
+            window.clearTimeout(copyTimer);
+          }, waitTime);
+        }
+
+        function copyToClipboard(isHtml = false) {
+          return () => {
+            window.getSelection().empty();
+
+            if (isHtml) {
+              const htmlText = $present.innerHTML;
+              const $hiddenInput = document.createElement("textarea");
+              $hiddenInput.setAttribute(
+                "style",
+                "opacity: 0; width: 0; height: 0;"
+              );
+              $hiddenInput.setAttribute("id", "selectedInput");
+              $hiddenInput.value = htmlText;
+              document.body.appendChild($hiddenInput);
+              $hiddenInput.select();
+            } else {
+              const selectedRange = document.createRange();
+              selectedRange.selectNodeContents($present.querySelector("table"));
+              window.getSelection().addRange(selectedRange);
+            }
+
+            try {
+              const result = document.execCommand("copy");
+              showCopyResult(result);
+            } catch (error) {
+              console.error("[Copy]", error);
+            } finally {
+              window.getSelection().empty();
+
+              if (isHtml) {
+                const $hiddenInput = document.querySelector("#selectedInput");
+                if ($hiddenInput) {
+                  document.body.removeChild($hiddenInput);
+                }
+              }
+            }
+          };
+        }
+
+        // Init
+        Object.values(fieldNameMapping).forEach((field) =>
+          render(document.querySelector(`#input-${field}`))
+        );
+        $form.addEventListener(
+          "keyup",
+          (evt) => console.log(evt) || render(evt.target)
+        );
+        $form.addEventListener(
+          "change",
+          (evt) => console.log(evt) || render(evt.target)
+        );
+
+        document
+          .querySelector("#copy-html-button")
+          .addEventListener("click", copyToClipboard(true));
+        document
+          .querySelector("#copy-text-button")
+          .addEventListener("click", copyToClipboard(false));
+      })();
+    </script>
+  </body>
+</html>
